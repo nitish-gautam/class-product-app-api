@@ -41,15 +41,3 @@ class ProductRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     def get_queryset(self):
         user = self.request.user
         return Product.objects.filter(user=user)
-
-class ProductComplete(generics.UpdateAPIView):
-    serializer_class = ProductCompleteSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-    def get_queryset(self):
-        user = self.request.user
-        return Product.objects.filter(user=user)
-
-    def perform_update(self, serializer):
-        serializer.instance.dateupdated = timezone.now()
-        serializer.save()
