@@ -1,7 +1,6 @@
 from rest_framework import generics, permissions
 from .serializers import ProductSerializer, ProductCompleteSerializer
 from .models import Product
-from django.utils import timezone
 from django.contrib.auth.models import User
 
 class ProductSoldoutList(generics.ListAPIView):
@@ -19,7 +18,6 @@ class ProductAvailableList(generics.ListAPIView):
 
     def get_queryset(self):
         user = self.request.user
-        #return Product.objects.filter(user=user, qty__isnull=False)
         return Product.objects.filter(user=user).exclude(qty=0)
 
 
@@ -29,7 +27,7 @@ class ProductListCreate(generics.ListCreateAPIView):
 
     def get_queryset(self):
         user = self.request.user
-        return Product.objects.filter(user=user, dateupdated__isnull=True)
+        return Product.objects.filter(user=user)
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
